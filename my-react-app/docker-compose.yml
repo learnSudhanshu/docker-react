@@ -1,0 +1,30 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - /app/node_modules # this is for telling the docker to not map this
+      - .:/app # Mapping the refernce with local from container
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    volumes:
+      - /app/node_modules # Excluding
+      - .:/app # Mapping
+    command: ["npm", "run" , "test"]  # this will override CMD in Dockerfile
+
+
+# In Docker Compose, the command directive under a service definition will override the default CMD specified in the Dockerfile when the container starts. So, if you have specified a command in the tests service 
+# as "npm run test", it will override the CMD instruction in the Dockerfile only when the tests service is started.
+
+# In your case:
+
+# For the web service, the CMD instruction specified in the Dockerfile (npm run start) will be executed when the container starts.
+# For the tests service, the npm run test command specified in the command directive will override the CMD instruction in the Dockerfile (npm run start) when the tests service is started.
+# So, when you run docker-compose up without specifying a service name, both services (web and tests) will be started. The web service will use npm run start as defined in the Dockerfile, 
+# and the tests service will use npm run test as specified in the command directive.

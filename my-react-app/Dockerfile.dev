@@ -1,0 +1,11 @@
+FROM node:16-alpine
+
+WORKDIR '/app'
+# after setting up Workdir the by-default refernce in dokcer will not be / i.e root directory , rather it will be workdir
+# so we will be copying package.json file into /app directory
+COPY package.json .
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "start"]
