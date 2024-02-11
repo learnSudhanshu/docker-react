@@ -1,0 +1,9 @@
+sudo: required
+services: # telling Ci to install Docker, ready to go
+  -docker
+
+before_install:
+  - docker build -t sudhanshu00i/docker-react -f Dockerfile.dev . # this is for test  
+
+script:
+  - docker run sudhanshu00i/docker-react npm run test -- --coverage
